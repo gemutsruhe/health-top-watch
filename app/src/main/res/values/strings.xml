@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">HealthtopWatch</string>
+    <string name="change_pip_content_action">CHANGE_PIP_CONTENT</string>
+    <string name="toggle_running_action">TOGGLE_RUNNING</string>
+</resources>
