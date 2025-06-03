@@ -1,5 +1,6 @@
 package com.suisei.healthtopwatch
 
+import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.app.PictureInPictureParams
 import android.app.RemoteAction
@@ -9,7 +10,10 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.ActivityInfo
 import android.graphics.drawable.Icon
+import android.net.Uri
 import android.os.Bundle
+import android.os.PowerManager
+import android.provider.Settings
 import android.util.Log
 import android.util.Rational
 import androidx.activity.ComponentActivity
@@ -45,8 +49,25 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    @SuppressLint("BatteryLife")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val packageName = applicationContext.packageName
+        val pm = getSystemService(Context.POWER_SERVICE) as PowerManager
+
+        val isWhitelisted = pm.isIgnoringBatteryOptimizations(packageName)
+
+        if(!isWhitelisted) {
+            if (!pm.isIgnoringBatteryOptimizations(packageName)) {
+                val intent = Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS).apply {
+                    data = Uri.parse("package:$packageName")
+                }
+                startActivity(intent)
+            }
+        }
+
+
         changeContentString = getString(R.string.change_pip_content_action)
         toggleRunningString = getString(R.string.toggle_running_action)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
