@@ -49,7 +49,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    @SuppressLint("BatteryLife")
+    @SuppressLint("BatteryLife", "SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -67,10 +67,9 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-
         changeContentString = getString(R.string.change_pip_content_action)
         toggleRunningString = getString(R.string.toggle_running_action)
-        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         enableEdgeToEdge()
 
         stopwatchViewModel = ViewModelProvider(this)[StopwatchViewModel::class.java]
@@ -85,7 +84,6 @@ class MainActivity : ComponentActivity() {
         lifecycleScope.launch {
             stopwatchViewModel.isRunning.collect { isRunning ->
                 run {
-                    Log.e("TEST", "isRunning: $isRunning")
                     toggleIconRes =
                         if (isRunning) R.drawable.pause_24dp_1f1f1f_fill1_wght400_grad0_opsz24 else R.drawable.play_arrow_24dp_1f1f1f_fill1_wght400_grad0_opsz24
                     setPipParams()

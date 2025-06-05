@@ -58,6 +58,9 @@ dependencies {
     implementation(libs.androidx.ui.text.google.fonts)
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
+    implementation("androidx.datastore:datastore-preferences:1.1.7")
+    implementation("androidx.datastore:datastore-preferences-core:1.1.7")
+    implementation(libs.tourtip)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

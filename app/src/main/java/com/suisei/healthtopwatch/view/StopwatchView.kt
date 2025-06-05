@@ -29,6 +29,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.fappslab.tourtip.compose.extension.tooltipAnchor
+import com.fappslab.tourtip.model.HighlightType
+import com.fappslab.tourtip.model.TooltipModel
 import com.suisei.healthtopwatch.ui.theme.mainColor
 import com.suisei.healthtopwatch.viewmodel.StopwatchViewModel
 
@@ -91,43 +94,5 @@ fun LinearRatioIndicator(stopwatchViewModel: StopwatchViewModel, progress: Float
 
 @Composable
 fun CircularRatioIndicator(stopwatchViewModel: StopwatchViewModel, progress: Float) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center
-    ) {
-        CrtRatio(stopwatchViewModel)
 
-        Box(modifier = Modifier, contentAlignment = Alignment.Center) {
-            CircularProgressIndicator(
-                progress = { progress },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .aspectRatio(1f)
-                    .align(Alignment.Center)
-                    .clip(CircleShape),
-                color = mainColor,
-                strokeWidth = 8.dp,
-                trackColor = Color.LightGray
-            )
-            NotifyRatioSetting(
-                stopwatchViewModel, Modifier
-                    .matchParentSize()
-                    .align(Alignment.Center)
-            )
-
-            Box(modifier = Modifier.matchParentSize(), contentAlignment = Alignment.BottomEnd) {
-                TextButton(
-                    onClick = { stopwatchViewModel.setPip() },
-                    modifier = Modifier.align(Alignment.BottomEnd),
-                    contentPadding = PaddingValues()
-                ) {
-                    Icon(
-                        Icons.Outlined.PictureInPictureAlt,
-                        null,
-                        modifier = Modifier.size(36.dp),
-                        tint = Color.Black
-                    )
-                }
-            }
-        }
-    }
 }
