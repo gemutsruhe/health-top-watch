@@ -4,6 +4,7 @@ import android.content.Context
 import android.media.AudioAttributes
 import android.media.AudioFocusRequest
 import android.media.AudioManager
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -35,6 +36,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -67,6 +69,7 @@ import com.suisei.healthtopwatch.ui.theme.mainColor
 import com.suisei.healthtopwatch.ui.theme.poppinsMediumFont
 import com.suisei.healthtopwatch.viewmodel.StopwatchViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collect
 import java.util.Locale
 
 @Composable
@@ -98,6 +101,18 @@ fun HealthWatchScreen() {
 
     val routedDeviceType = MutableStateFlow(0)
 
+    LaunchedEffect(Unit) {
+        stopwatchViewModel.requestSetRunning.collect { state ->
+            Log.e("TEST", "$state")
+            if(state) {
+                stopwatchViewModel.startStopwatch()
+            } else {
+                stopwatchViewModel.stopStopwatch()
+            }
+        }
+
+    }
+
     HandleRequestAudioFocus(
         stopwatchViewModel,
         lifecycleScope,
@@ -115,17 +130,26 @@ fun HealthWatchScreen() {
         routedDeviceType
     )
 
-    if (isInPipMode) {
-        PipView(stopwatchViewModel, progress)
-    } else {
-        TourtipLayout { controller ->
-            LaunchedEffect(Unit) {
-                context.isFirstRun.collect {
-                    if (it) controller.startTourtip()
-                }
+    HandleStartNotification(
+        stopwatchViewModel,
+        lifecycleScope,
+        audioManager,
+        focusRequest,
+        routedDeviceType
+    )
+
+    TourtipLayout { controller ->
+        LaunchedEffect(Unit) {
+            context.isFirstRun.collect {
+                if (it) controller.startTourtip()
             }
-            HealthWatchTheme {
-                Scaffold(modifier = Modifier) { innerPadding ->
+        }
+
+        HealthWatchTheme {
+            if (isInPipMode) {
+                PipView(stopwatchViewModel, progress)
+            } else {
+                Scaffold(modifier = Modifier, containerColor = MaterialTheme.colorScheme.background) { innerPadding ->
                     Column(
                         modifier = Modifier
                             .padding(innerPadding),
@@ -246,7 +270,7 @@ fun PipButton(modifier: Modifier, stopwatchViewModel: StopwatchViewModel) {
                 Icons.Outlined.PictureInPictureAlt,
                 null,
                 modifier = Modifier.size(36.dp),
-                tint = Color.Black
+                tint = MaterialTheme.colorScheme.onBackground
             )
         }
     }
@@ -282,7 +306,7 @@ fun ControlButtons(stopwatchViewModel: StopwatchViewModel) {
                         containerColor = mainColor, contentColor = Color.White
                     ),
                     icon = Icons.Filled.PlayArrow,
-                    contentColor = Color.White
+                    contentColor = MaterialTheme.colorScheme.onPrimary
                 )
             }
 
@@ -295,7 +319,7 @@ fun ControlButtons(stopwatchViewModel: StopwatchViewModel) {
                         containerColor = cancelColor, contentColor = Color.White
                     ),
                     icon = Icons.Filled.Stop,
-                    contentColor = Color.White
+                    contentColor = MaterialTheme.colorScheme.onPrimary
                 )
             }
         }

@@ -216,7 +216,6 @@ fun NumberPicker(value: Int, onValueChange: (Int) -> Unit, btnChangeValue: Int, 
             },
             modifier = Modifier.width(60.dp),
             textStyle = LocalTextStyle.current.copy(
-                color = Color.Black,
                 fontSize = 24.sp,
                 fontFamily = poppinsMediumFont,
                 textAlign = TextAlign.Center

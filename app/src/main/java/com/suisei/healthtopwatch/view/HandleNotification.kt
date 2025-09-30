@@ -141,3 +141,27 @@ fun HandlePracticeNotification(
         }
     }
 }
+
+@Composable
+fun HandleStartNotification(
+    stopwatchViewModel: StopwatchViewModel,
+    lifecycleScope: CoroutineScope,
+    audioManager: AudioManager,
+    focusRequest: AudioFocusRequest,
+    routedDeviceType: StateFlow<Int>,
+) {
+    val notifySetting by stopwatchViewModel.notifySetting.collectAsState()
+    LaunchedEffect(Unit) {
+        stopwatchViewModel.startNotification.collect {
+            lifecycleScope.launch {
+                if (routedDeviceType.value == 7 || routedDeviceType.value == 8) delay(600)
+                else delay(1000)
+                if (notifySetting.sound) {
+                    val toneGen = ToneGenerator(AudioManager.STREAM_MUSIC, 100)
+                    toneGen.startTone(ToneGenerator.TONE_PROP_BEEP, 400)
+                    audioManager.abandonAudioFocusRequest(focusRequest)
+                }
+            }
+        }
+    }
+}

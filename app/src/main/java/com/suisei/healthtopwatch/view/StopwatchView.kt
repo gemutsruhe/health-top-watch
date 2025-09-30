@@ -3,37 +3,25 @@ package com.suisei.healthtopwatch.view
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.PictureInPictureAlt
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.fappslab.tourtip.compose.extension.tooltipAnchor
-import com.fappslab.tourtip.model.HighlightType
-import com.fappslab.tourtip.model.TooltipModel
 import com.suisei.healthtopwatch.ui.theme.mainColor
 import com.suisei.healthtopwatch.viewmodel.StopwatchViewModel
+import kotlin.math.abs
 
 fun formatElapsed(ms: Long, isInPipMode: Boolean): String {
     val totalSeconds = ms / 1000
@@ -41,8 +29,9 @@ fun formatElapsed(ms: Long, isInPipMode: Boolean): String {
     val minutes = (totalSeconds / 60) % 60
     val seconds = totalSeconds % 60
     val millis = ms % 1000
-    if (isInPipMode) return "%02d:%02d:%02d".format(hours, minutes, seconds, millis)
-    else return "%02d:%02d:%02d.%03d".format(hours, minutes, seconds, millis)
+    return if (ms < 0) "-%02d.%03d".format(abs(seconds), abs(millis))
+    else if (isInPipMode) "%02d:%02d:%02d".format(hours, minutes, seconds, millis)
+    else "%02d:%02d:%02d.%03d".format(hours, minutes, seconds, millis)
 }
 
 @Composable
@@ -81,7 +70,11 @@ fun LinearRatioIndicator(stopwatchViewModel: StopwatchViewModel, progress: Float
             ) {
                 //Sets
                 Row {
-                    Text("$remainSets", modifier = Modifier.padding(0.dp, 0.dp, 6.dp, 0.dp), fontSize = 18.sp)
+                    Text(
+                        "$remainSets",
+                        modifier = Modifier.padding(0.dp, 0.dp, 6.dp, 0.dp),
+                        fontSize = 18.sp
+                    )
                     Text("Set", fontSize = 18.sp)
                 }
 
@@ -90,9 +83,4 @@ fun LinearRatioIndicator(stopwatchViewModel: StopwatchViewModel, progress: Float
 
         }
     }
-}
-
-@Composable
-fun CircularRatioIndicator(stopwatchViewModel: StopwatchViewModel, progress: Float) {
-
 }

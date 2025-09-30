@@ -1,6 +1,7 @@
 package com.suisei.healthtopwatch.di
 
 import android.content.Context
+import com.suisei.healthtopwatch.repository.StopwatchRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,5 +17,11 @@ object AppModule {
     @Singleton
     fun provideContext(@ApplicationContext context: Context): Context {
         return context
+    }
+
+    @Provides
+    @Singleton
+    fun provideStopwatchRepository(): StopwatchRepository {
+        return StopwatchRepository()
     }
 }

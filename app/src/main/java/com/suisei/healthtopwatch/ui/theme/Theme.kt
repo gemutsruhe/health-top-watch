@@ -18,14 +18,19 @@ import com.suisei.healthtopwatch.R
 
 private val DarkColorScheme = darkColorScheme(
     primary = Purple80,
+    onPrimary = Color.White,
     secondary = PurpleGrey80,
-    tertiary = Pink80
+    tertiary = Pink80,
+    background = Color.DarkGray,
+    onBackground = Color.White
 )
 
 private val LightColorScheme = lightColorScheme(
     primary = Purple40,
+    onPrimary = Color.White,
     secondary = PurpleGrey40,
-    tertiary = Pink40
+    tertiary = Pink40,
+    onBackground = Color.Black
 )
 
 val poppinsMediumFont = FontFamily(Font(R.font.roboto_mono_medium))
@@ -34,9 +39,9 @@ val cancelColor = Color(0XFFEF3B36)
 
 @Composable
 fun HealthWatchTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    darkTheme: Boolean = /*isSystemInDarkTheme()*/false,
     // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
@@ -53,7 +58,7 @@ fun HealthWatchTheme(
         colorScheme = colorScheme,
         typography = Typography
     ) {
-        ProvideTextStyle(value = TextStyle(color = Color.Black, fontFamily = poppinsMediumFont)) {
+        ProvideTextStyle(value = TextStyle(color = colorScheme.onBackground, fontFamily = poppinsMediumFont)) {
             content()
         }
     }

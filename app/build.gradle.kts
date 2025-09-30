@@ -60,6 +60,7 @@ dependencies {
     kapt(libs.hilt.android.compiler)
     implementation("androidx.datastore:datastore-preferences:1.1.7")
     implementation("androidx.datastore:datastore-preferences-core:1.1.7")
+    implementation("androidx.media:media:1.7.0")
     implementation(libs.tourtip)
 
     testImplementation(libs.junit)
